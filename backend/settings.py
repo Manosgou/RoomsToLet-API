@@ -130,7 +130,7 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 STATIC_URL = '/static/'
 
-SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
+SITE_ROOT = os.path.abspath(os.path.dirname(__file__))
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
     os.path.join(SITE_ROOT, 'static/'),
