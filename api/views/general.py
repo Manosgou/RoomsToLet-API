@@ -1,19 +1,21 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
-from django.contrib.auth import authenticate
 from rest_framework.parsers import JSONParser
 from rest_framework.authtoken.models import Token
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
     HTTP_404_NOT_FOUND
 )
-from api.seriliazers.general import UserSigninSerializer
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from api.serializers import UserSigninSerializer
+from django.contrib.auth import authenticate
 
 
 @api_view(['POST'])
 def login(request):
     data = JSONParser().parse(request)
-    print(data)
+
     signin_serializer = UserSigninSerializer(data=data)
     if not signin_serializer.is_valid():
         return Response(signin_serializer.errors, status=HTTP_400_BAD_REQUEST)
@@ -28,6 +30,13 @@ def login(request):
     token, _ = Token.objects.get_or_create(user=user)
 
     return Response({
-        'token': token.key,
-        'is_admin': user.is_superuser
+        'token': token.key
     })
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def logout(request):
+    print(request.user.auth_token)
+    request.user.auth_token.delete()
+    return Response(status=status.HTTP_200_OK)
