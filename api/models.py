@@ -9,7 +9,7 @@ from django.utils.text import slugify
 
 class House(models.Model):
     title = models.CharField(max_length=50)
-    image = models.ImageField(default='')
+    image = models.ImageField(default='', blank=True)
     rooms = models.IntegerField(default=1)
     bathrooms = models.IntegerField(default=1)
     has_kitchen = models.BooleanField(default=False)
@@ -34,5 +34,5 @@ class House(models.Model):
 
 
 class HouseImage(models.Model):
-    house = models.ForeignKey(House, on_delete=models.CASCADE)
+    house_id = models.ForeignKey(House, default='', on_delete=models.CASCADE)
     image = models.ImageField(upload_to="houses/")
