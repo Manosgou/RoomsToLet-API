@@ -26,3 +26,6 @@ class HouseAdmin(admin.ModelAdmin):
 
 
 admin.site.register(House, HouseAdmin)
+
+
+admin.site.register(Requests)

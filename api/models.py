@@ -36,3 +36,14 @@ class House(models.Model):
 class HouseImage(models.Model):
     house_id = models.ForeignKey(House, default='', on_delete=models.CASCADE)
     image = models.ImageField(upload_to="houses/")
+
+
+class Requests(models.Model):
+    PENDING = 'PE'
+    DONE = 'DO'
+    STATUSES = [(PENDING, 'Pending'), (DONE, 'Done')]
+
+    house = models.OneToOneField(House, on_delete=models.CASCADE)
+    description = models.TextField(max_length=200)
+    status = models.CharField(
+        max_length=2, choices=STATUSES, default=PENDING)
