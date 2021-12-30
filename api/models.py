@@ -1,8 +1,9 @@
+import shortuuid
 from django.db import models
 from unidecode import unidecode
-from PIL import Image
 from django.shortcuts import reverse
 from django.utils.text import slugify
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 
 # Create your models here.
@@ -47,3 +48,25 @@ class Request(models.Model):
     description = models.TextField(max_length=200)
     status = models.CharField(
         max_length=2, choices=STATUSES, default=PENDING)
+
+    def __str__(self) -> str:
+        return f"Request for house:{self.house.title}"
+
+
+class Booking(models.Model):
+    id = models.CharField(primary_key=True, editable=False, max_length=4)
+    house = models.OneToOneField(House, on_delete=models.CASCADE)
+    lastname = models.CharField(max_length=50)
+    firstname = models.CharField(max_length=50)
+    duration = models.IntegerField(default=1, validators=[
+        MaxValueValidator(50),
+        MinValueValidator(1)
+    ])
+
+    def __str__(self) -> str:
+        return f'The house: "{self.house.title}" has been booked by {self.lastname +" "+ self.firstname} with id: {self.id}'
+
+    def save(self, *args, **kwargs):
+        if not self.id:
+            self.id = shortuuid.ShortUUID().random(length=4).upper()
+        super(Booking, self).save(*args, **kwargs)

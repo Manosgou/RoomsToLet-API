@@ -29,3 +29,4 @@ admin.site.register(House, HouseAdmin)
 
 
 admin.site.register(Request)
+admin.site.register(Booking)

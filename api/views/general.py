@@ -10,8 +10,6 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from api.serializers.general import UserSigninSerializer
 from django.contrib.auth import authenticate
-from api.serializers.general import HouseSerializer
-from api.models import House
 
 
 @api_view(['POST'])
@@ -42,17 +40,3 @@ def logout(request):
     print(request.user.auth_token)
     request.user.auth_token.delete()
     return Response(status=status.HTTP_200_OK)
-
-
-@api_view(['GET'])
-def get_available_houses(request):
-    houses = House.objects.filter(is_available=True)
-    serialized_houses = HouseSerializer(houses, many=True)
-    return Response(serialized_houses.data)
-
-
-@api_view(['GET'])
-def get_house(request, id):
-    house = House.objects.get(id=id)
-    serialized_house = HouseSerializer(house)
-    return Response(serialized_house.data)

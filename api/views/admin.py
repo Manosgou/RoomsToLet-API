@@ -24,7 +24,6 @@ def add_new_house(request):
     if serializer.is_valid():
         serializer.save()
         return Response(status=HTTP_201_CREATED)
-    print(serializer.errors)
     return Response(status=HTTP_400_BAD_REQUEST)
 
 
