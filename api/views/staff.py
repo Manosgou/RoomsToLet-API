@@ -3,31 +3,49 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.status import (
     HTTP_400_BAD_REQUEST,
-    HTTP_404_NOT_FOUND
+    HTTP_404_NOT_FOUND,
+    HTTP_200_OK,
+    HTTP_204_NO_CONTENT
 )
-from api.models import Requests
+from api.models import Request, Request
 from api.serializers.staff import RequestsSeriliazer
 
 
 @api_view(['GET'])
 def get_requests(request):
-    requests = Requests.objects.all()
+    requests = Request.objects.all()
     serializer = RequestsSeriliazer(requests, many=True)
     return Response(serializer.data)
 
 
 @api_view(['GET'])
 def get_request(request, id):
-    request = Requests.objects.get(id=id)
-    serializer = RequestsSeriliazer(request)
+    try:
+        req = Request.objects.get(id=id)
+        serializer = RequestsSeriliazer(req)
+    except:
+        return Response(status=HTTP_404_NOT_FOUND)
     return Response(serializer.data)
 
 
 @api_view(['DELETE'])
 def delete_request(request, id):
-    pass
+    try:
+        req = Request.objects.get(id=id)
+        req.delete()
+    except Request.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(status=HTTP_200_OK)
 
 
 @api_view(['PUT'])
 def update_request_status(request, id):
-    pass
+    try:
+        req = Request.objects.get(id=id)
+        data = JSONParser().parse(request)
+        serializer = RequestsSeriliazer(req, data=data)
+        if serializer.is_valid():
+            serializer.save()
+    except Request.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(status=HTTP_204_NO_CONTENT)

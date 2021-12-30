@@ -38,7 +38,7 @@ class HouseImage(models.Model):
     image = models.ImageField(upload_to="houses/")
 
 
-class Requests(models.Model):
+class Request(models.Model):
     PENDING = 'PE'
     DONE = 'DO'
     STATUSES = [(PENDING, 'Pending'), (DONE, 'Done')]
