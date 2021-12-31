@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
-from api.models import House
+from api.models import Booking, House
 from django.contrib.auth.models import User
 from api.serializers.admin import CreateUpdateHouseSerializer, GetHouseSerializer, StaffMembersSerializer
 from rest_framework.status import (
@@ -100,3 +100,18 @@ def update_staff_member(request, id):
     except House.DoesNotExist:
         return Response(status=HTTP_404_NOT_FOUND)
     return Response(status=HTTP_204_NO_CONTENT)
+
+
+@api_view(['GET'])
+def get_bookings(request):
+    pass
+
+
+@api_view(['DELETE'])
+def delete_booking(request, id):
+    pass
+
+
+@api_view(['PUT'])
+def update_booking(request, id):
+    pass

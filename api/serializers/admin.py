@@ -1,7 +1,7 @@
 from django.db.models import fields
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from api.models import House, HouseImage
+from api.models import Booking, House, HouseImage
 from drf_extra_fields.fields import Base64ImageField
 from django.contrib.auth.hashers import make_password
 
@@ -93,13 +93,12 @@ class CreateUpdateHouseSerializer(serializers.ModelSerializer):
         instance.price = validated_data.get('price', instance.price)
 
         images = validated_data.pop('images')
-        # print(images)
+
         for image in images:
             print(image)
             house_image, created = HouseImage.objects.update_or_create(
                 id=image.get('id'), house_id=instance)
             if image['image'] is not None and created:
-
                 house_image.image = image['image']
                 house_image.save()
             else:

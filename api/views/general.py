@@ -37,6 +37,5 @@ def login(request):
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def logout(request):
-    print(request.user.auth_token)
     request.user.auth_token.delete()
     return Response(status=status.HTTP_200_OK)

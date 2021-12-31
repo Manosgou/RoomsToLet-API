@@ -59,6 +59,7 @@ DROPBOX_ROOT_PATH = env.str('DROPBOX_PATH')
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'api.authentication.ClientAuthentication'
     ],
 }
 

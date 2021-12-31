@@ -44,7 +44,7 @@ class Request(models.Model):
     DONE = 'DO'
     STATUSES = [(PENDING, 'Pending'), (DONE, 'Done')]
 
-    house = models.OneToOneField(House, on_delete=models.CASCADE)
+    house = models.ForeignKey(House, on_delete=models.CASCADE)
     description = models.TextField(max_length=200)
     status = models.CharField(
         max_length=2, choices=STATUSES, default=PENDING)
@@ -62,6 +62,7 @@ class Booking(models.Model):
         MaxValueValidator(50),
         MinValueValidator(1)
     ])
+    total_price = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self) -> str:
         return f'The house: "{self.house.title}" has been booked by {self.lastname +" "+ self.firstname} with id: {self.id}'
@@ -69,4 +70,5 @@ class Booking(models.Model):
     def save(self, *args, **kwargs):
         if not self.id:
             self.id = shortuuid.ShortUUID().random(length=4).upper()
+        self.total_price = self.duration*self.house.price
         super(Booking, self).save(*args, **kwargs)
