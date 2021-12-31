@@ -1,8 +1,9 @@
 from django.urls import path
-from api.views.admin import get_house, add_new_house, delete_house, get_staff_members, update_house, create_staff_member, get_staff_member, delete_staff_member, update_staff_member
+from api.views.admin import get_houses, get_house, add_new_house, delete_house, get_staff_members, update_house, create_staff_member, get_staff_member, delete_staff_member, update_staff_member
 
 
 urlpatterns = [
+    path('get/houses', get_houses),
     path('get/house/<int:id>', get_house),
     path('add/new/house', add_new_house),
     path('delete/house/<int:id>', delete_house),

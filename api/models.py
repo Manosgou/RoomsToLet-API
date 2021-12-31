@@ -65,7 +65,7 @@ class Booking(models.Model):
     total_price = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self) -> str:
-        return f'The house: "{self.house.title}" has been booked by {self.lastname +" "+ self.firstname} with id: {self.id}'
+        return f'The house: "{self.house.title}" has been booked by {self.lastname +" "+ self.firstname} with booking code: {self.id}'
 
     def save(self, *args, **kwargs):
         if not self.id:

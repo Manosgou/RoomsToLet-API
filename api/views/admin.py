@@ -11,6 +11,13 @@ from rest_framework.status import (
 
 
 @api_view(['GET'])
+def get_houses(request):
+    houses = House.objects.all()
+    serializer = GetHouseSerializer(houses, many=True)
+    return Response(serializer.data, status=HTTP_200_OK)
+
+
+@api_view(['GET'])
 def get_house(request, id):
     house = House.objects.get(id=id)
     serializer = GetHouseSerializer(house)

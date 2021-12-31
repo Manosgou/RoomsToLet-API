@@ -41,10 +41,11 @@ def book_house(request):
 
 @api_view(['GET'])
 def check_booking(request, id):
-    booking = Booking.objects.get(id=id)
-    if booking:
-        return Response(status=HTTP_200_OK)
-    return Response(status=HTTP_404_NOT_FOUND)
+    try:
+        Booking.objects.get(id=id)
+    except Booking.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(status=HTTP_200_OK)
 
 
 @api_view(['GET'])
@@ -65,3 +66,13 @@ def make_requests(request):
         serializer.save()
         return Response(status=HTTP_201_CREATED)
     return Response(status=HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+def stop_accommodation(request, id):
+    try:
+        booking = Booking.objects.get(id=id)
+        booking.delete()
+    except Booking.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(status=HTTP_204_NO_CONTENT)
