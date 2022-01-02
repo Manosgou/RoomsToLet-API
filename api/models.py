@@ -3,7 +3,7 @@ from django.db import models
 from unidecode import unidecode
 from django.shortcuts import reverse
 from django.utils.text import slugify
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MaxValueValidator, MinValueValidator, RegexValidator
 
 
 # Create your models here.
@@ -58,10 +58,14 @@ class Booking(models.Model):
     house = models.OneToOneField(House, on_delete=models.CASCADE)
     lastname = models.CharField(max_length=50)
     firstname = models.CharField(max_length=50)
+    phone_number = models.CharField(
+        validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')], max_length=10, blank=True)
+    email = models.EmailField()
     duration = models.IntegerField(default=1, validators=[
         MaxValueValidator(50),
         MinValueValidator(1)
     ])
+    date = models.DateField(auto_now_add=True)
     total_price = models.DecimalField(max_digits=7, decimal_places=2)
 
     def __str__(self) -> str:

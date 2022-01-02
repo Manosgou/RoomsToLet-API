@@ -75,7 +75,6 @@ class CreateUpdateHouseSerializer(serializers.ModelSerializer):
         return house
 
     def update(self, instance, validated_data):
-        print(validated_data)
         instance.title = validated_data.get('title', instance.title)
         instance.image = validated_data.get('image', instance.image)
         instance.rooms = validated_data.get('rooms', instance.rooms)
@@ -106,3 +105,26 @@ class CreateUpdateHouseSerializer(serializers.ModelSerializer):
 
         instance.save()
         return instance
+
+
+class HouseSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = House
+        fields = ('id', 'title')
+
+
+class BookingSerializer(serializers.ModelSerializer):
+    house = HouseSerializer(read_only=True)
+
+    class Meta:
+        model = Booking
+        fields = ('id', 'house', 'lastname', 'firstname',
+                  'email', 'phone_number', 'duration')
+
+
+class UpdateBookingSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Booking
+        fields = ('id', 'house', 'lastname', 'firstname',
+                  'email', 'phone_number', 'duration')

@@ -4,7 +4,7 @@ from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from api.models import Booking, House
 from django.contrib.auth.models import User
-from api.serializers.admin import CreateUpdateHouseSerializer, GetHouseSerializer, StaffMembersSerializer
+from api.serializers.admin import CreateUpdateHouseSerializer, GetHouseSerializer, HouseSerializer, StaffMembersSerializer, BookingSerializer, UpdateBookingSerializer
 from rest_framework.status import (
     HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 )
@@ -14,6 +14,13 @@ from rest_framework.status import (
 def get_houses(request):
     houses = House.objects.all()
     serializer = GetHouseSerializer(houses, many=True)
+    return Response(serializer.data, status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_available_houses(request):
+    available_houses = House.objects.filter(is_available=True)
+    serializer = HouseSerializer(available_houses, many=True)
     return Response(serializer.data, status=HTTP_200_OK)
 
 
@@ -111,14 +118,45 @@ def update_staff_member(request, id):
 
 @api_view(['GET'])
 def get_bookings(request):
-    pass
+    bookings = Booking.objects.all()
+    serializer = BookingSerializer(bookings, many=True)
+    return Response(serializer.data, status=HTTP_200_OK)
+
+
+@api_view(['GET'])
+def get_booking(request, id):
+    try:
+        booking = Booking.objects.get(id=id)
+        serializer = BookingSerializer(booking)
+    except Booking.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(serializer.data, status=HTTP_200_OK)
 
 
 @api_view(['DELETE'])
 def delete_booking(request, id):
-    pass
+    try:
+        booking = Booking.objects.get(id=id)
+        booking.delete()
+    except Booking.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(status=HTTP_204_NO_CONTENT)
 
 
 @api_view(['PUT'])
 def update_booking(request, id):
-    pass
+    try:
+        booking = Booking.objects.get(id=id)
+        data = JSONParser().parse(request)
+        house_id = data.get('house')
+        if house_id:
+            data['house'] = int(house_id)
+        print(data)
+        serializer = UpdateBookingSerializer(
+            booking, data=data)
+        if serializer.is_valid():
+            serializer.save()
+        print(serializer.errors)
+    except Booking.DoesNotExist:
+        return Response(status=HTTP_404_NOT_FOUND)
+    return Response(status=HTTP_204_NO_CONTENT)

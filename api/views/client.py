@@ -11,6 +11,8 @@ from rest_framework.status import (
     HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 )
 from api.authentication import ClientAuthentication
+from django.core.mail import send_mail
+from django.conf import settings
 
 
 @api_view(['GET'])
@@ -33,9 +35,18 @@ def book_house(request):
     serializer = BookingSerializer(data=data)
     if serializer.is_valid():
         serializer.save()
-        booking_id = serializer.data.get('id')
-        print(serializer.errors)
-        return Response({"book_code": booking_id}, status=HTTP_201_CREATED)
+        booking_code = serializer.data.get('id')
+        lastname = serializer.data.get('lastname')
+        firstname = serializer.data.get('firstname')
+        email = serializer.data.get('email')
+        send_mail(
+            subject='Your booking code',
+            message=f'Dear Sir / Madam {lastname} {firstname},\n \n \n Thank you for choosing us. Your booking code is {booking_code}',
+            from_email=settings.EMAIL_HOST_USER,
+            recipient_list=[email]
+        )
+        return Response({"book_code": booking_code}, status=HTTP_201_CREATED)
+    print(serializer.errors)
     return Response(status=HTTP_400_BAD_REQUEST)
 
 
