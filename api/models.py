@@ -58,8 +58,7 @@ class Booking(models.Model):
     house = models.OneToOneField(House, on_delete=models.CASCADE)
     lastname = models.CharField(max_length=50)
     firstname = models.CharField(max_length=50)
-    phone_number = models.CharField(
-        validators=[RegexValidator(r'^\d{3}-\d{3}-\d{4}$')], max_length=10, blank=True)
+    phone_number = models.CharField(max_length=10, null=True, blank=True)
     email = models.EmailField()
     duration = models.IntegerField(default=1, validators=[
         MaxValueValidator(50),
