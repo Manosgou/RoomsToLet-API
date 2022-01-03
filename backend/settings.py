@@ -60,7 +60,7 @@ CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env.str('CLOUD_NAME'),
     'API_KEY': env.str('API_KEY'),
     'API_SECRET': env.str('API_SECRET'),
-    'STATICFILES_MANIFEST_ROOT': BASE_DIR/'static'
+    'STATICFILES_MANIFEST_ROOT': os.path.join(BASE_DIR, 'static')
 }
 
 REST_FRAMEWORK = {
