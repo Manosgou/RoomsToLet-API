@@ -52,6 +52,16 @@ INSTALLED_APPS = [
     'api'
 ]
 
+DEFAULT_RENDERER_CLASSES = (
+    'rest_framework.renderers.JSONRenderer',
+)
+
+if DEBUG:
+    DEFAULT_RENDERER_CLASSES = DEFAULT_RENDERER_CLASSES + (
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+
+
 CLOUDINARY_STORAGE = {
     'CLOUD_NAME': env.str('CLOUD_NAME'),
     'API_KEY': env.str('API_KEY'),
@@ -62,7 +72,6 @@ CLOUDINARY_STORAGE = {
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-        'api.authentication.ClientAuthentication'
     ],
 }
 
