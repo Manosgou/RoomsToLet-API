@@ -8,7 +8,6 @@ Django==4.0
 django-environ==0.8.1
 django-filter==21.1
 djangorestframework==3.12.4
-dropbox==11.25.0
 google-api-core==2.3.0
 google-api-python-client==2.33.0
 google-auth==1.35.0
