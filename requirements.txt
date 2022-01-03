@@ -7,7 +7,6 @@ dj-database-url==0.5.0
 Django==4.0
 django-environ==0.8.1
 django-filter==21.1
-django-heroku==0.0.0
 djangorestframework==3.12.4
 dropbox==11.25.0
 google-api-core==2.3.0

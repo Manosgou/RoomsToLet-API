@@ -12,11 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 import environ
-import django_heroku
-import cloudinary
-import cloudinary.uploader
-import cloudinary.api
-from pathlib import Path
+import dj_database_url
 
 env = environ.Env(
     DEBUG=(bool, False)
@@ -37,7 +33,7 @@ SECRET_KEY = env.str('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['192.168.1.2']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -115,6 +111,10 @@ DATABASES = {
 }
 
 
+db_from_env = dj_database_url.config(conn_max_age=600)
+DATABASES['default'].update(db_from_env)
+
+
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
 
@@ -170,4 +170,3 @@ DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-django_heroku.settings(locals())
