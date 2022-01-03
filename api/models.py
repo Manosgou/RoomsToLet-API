@@ -10,7 +10,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator, RegexVa
 
 class House(models.Model):
     title = models.CharField(max_length=50)
-    image = models.ImageField(default='', blank=True)
+    image = models.ImageField(upload_to="thumbnails/")
     rooms = models.IntegerField(default=1)
     bathrooms = models.IntegerField(default=1)
     has_kitchen = models.BooleanField(default=False)
@@ -36,7 +36,7 @@ class House(models.Model):
 
 class HouseImage(models.Model):
     house_id = models.ForeignKey(House, default='', on_delete=models.CASCADE)
-    image = models.ImageField(upload_to="houses/")
+    image = models.ImageField(upload_to="house_images/")
 
 
 class Request(models.Model):
