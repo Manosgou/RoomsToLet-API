@@ -10,7 +10,6 @@ from rest_framework.authtoken.models import Token
 from rest_framework.status import (
     HTTP_200_OK, HTTP_201_CREATED, HTTP_204_NO_CONTENT, HTTP_400_BAD_REQUEST, HTTP_404_NOT_FOUND
 )
-from api.authentication import ClientAuthentication
 from django.core.mail import send_mail
 from django.conf import settings
 
