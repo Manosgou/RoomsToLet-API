@@ -10,11 +10,19 @@ from rest_framework.status import (
 )
 
 
-@api_view(['GET'])
-def get_houses(request):
-    houses = House.objects.all()
-    serializer = GetHouseSerializer(houses, many=True)
-    return Response(serializer.data, status=HTTP_200_OK)
+@api_view(['GET', 'POST'])
+def houses(request):
+    if request.method == 'GET':
+        houses = House.objects.all()
+        serializer = GetHouseSerializer(houses, many=True)
+        return Response(serializer.data, status=HTTP_200_OK)
+    elif request.method == 'POST':
+        data = JSONParser().parse(request)
+        serializer = CreateUpdateHouseSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=HTTP_201_CREATED)
+    return Response(status=HTTP_400_BAD_REQUEST)
 
 
 @api_view(['GET'])
@@ -29,16 +37,6 @@ def get_house(request, id):
     house = House.objects.get(id=id)
     serializer = GetHouseSerializer(house)
     return Response(serializer.data, status=HTTP_200_OK)
-
-
-@api_view(['POST'])
-def add_new_house(request):
-    data = JSONParser().parse(request)
-    serializer = CreateUpdateHouseSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(status=HTTP_201_CREATED)
-    return Response(status=HTTP_400_BAD_REQUEST)
 
 
 @api_view(['DELETE'])
@@ -65,20 +63,18 @@ def update_house(request, id):
     return Response(status=HTTP_204_NO_CONTENT)
 
 
-@api_view(['GET'])
-def get_staff_members(request):
-    staff_members = User.objects.filter(is_staff=True)
-    seriliazer = StaffMembersSerializer(staff_members, many=True)
-    return Response(seriliazer.data, status=HTTP_200_OK)
-
-
-@api_view(['POST'])
-def create_staff_member(request):
-    data = JSONParser().parse(request)
-    serializer = StaffMembersSerializer(data=data)
-    if serializer.is_valid():
-        serializer.save()
-        return Response(status=HTTP_201_CREATED)
+@api_view(['GET', 'POST'])
+def staff_members(request):
+    if request.method =='GET':
+        staff_members = User.objects.filter(is_staff=True)
+        seriliazer = StaffMembersSerializer(staff_members, many=True)
+        return Response(seriliazer.data, status=HTTP_200_OK)
+    elif request.method =='POST':
+        data = JSONParser().parse(request)
+        serializer = StaffMembersSerializer(data=data)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(status=HTTP_201_CREATED)
     return Response(status=HTTP_400_BAD_REQUEST)
 
 
@@ -117,7 +113,7 @@ def update_staff_member(request, id):
 
 
 @api_view(['GET'])
-def get_bookings(request):
+def bookings(request):
     bookings = Booking.objects.all()
     serializer = BookingSerializer(bookings, many=True)
     return Response(serializer.data, status=HTTP_200_OK)
