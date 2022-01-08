@@ -1,5 +1,5 @@
-from rest_framework import serializers
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from api.models import Booking, House
@@ -11,6 +11,7 @@ from rest_framework.status import (
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def houses(request):
     if request.method == 'GET':
         houses = House.objects.all()
@@ -33,6 +34,7 @@ def get_available_houses(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_house(request, id):
     house = House.objects.get(id=id)
     serializer = GetHouseSerializer(house)
@@ -40,6 +42,7 @@ def get_house(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_house(request, id):
     try:
         house = House.objects.get(id=id)
@@ -50,6 +53,7 @@ def delete_house(request, id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_house(request, id):
     try:
         house = House.objects.get(id=id)
@@ -64,12 +68,13 @@ def update_house(request, id):
 
 
 @api_view(['GET', 'POST'])
+@permission_classes([IsAuthenticated])
 def staff_members(request):
-    if request.method =='GET':
+    if request.method == 'GET':
         staff_members = User.objects.filter(is_staff=True)
         seriliazer = StaffMembersSerializer(staff_members, many=True)
         return Response(seriliazer.data, status=HTTP_200_OK)
-    elif request.method =='POST':
+    elif request.method == 'POST':
         data = JSONParser().parse(request)
         serializer = StaffMembersSerializer(data=data)
         if serializer.is_valid():
@@ -79,6 +84,7 @@ def staff_members(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_staff_member(request, id):
     try:
         staff_member = User.objects.get(id=id)
@@ -89,6 +95,7 @@ def get_staff_member(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_staff_member(request, id):
     try:
         staff_member = User.objects.get(id=id)
@@ -99,6 +106,7 @@ def delete_staff_member(request, id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_staff_member(request, id):
     try:
         staff_member = User.objects.get(id=id)
@@ -113,6 +121,7 @@ def update_staff_member(request, id):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def bookings(request):
     bookings = Booking.objects.all()
     serializer = BookingSerializer(bookings, many=True)
@@ -120,6 +129,7 @@ def bookings(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_booking(request, id):
     try:
         booking = Booking.objects.get(id=id)
@@ -130,6 +140,7 @@ def get_booking(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_booking(request, id):
     try:
         booking = Booking.objects.get(id=id)
@@ -140,6 +151,7 @@ def delete_booking(request, id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_booking(request, id):
     try:
         booking = Booking.objects.get(id=id)
