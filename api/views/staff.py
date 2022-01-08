@@ -1,4 +1,5 @@
 from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.parsers import JSONParser
 from rest_framework.status import (
@@ -12,6 +13,7 @@ from api.serializers.staff import RequestsSeriliazer
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_requests(request):
     requests = Request.objects.all()
     serializer = RequestsSeriliazer(requests, many=True)
@@ -19,6 +21,7 @@ def get_requests(request):
 
 
 @api_view(['GET'])
+@permission_classes([IsAuthenticated])
 def get_request(request, id):
     try:
         req = Request.objects.get(id=id)
@@ -29,6 +32,7 @@ def get_request(request, id):
 
 
 @api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
 def delete_request(request, id):
     try:
         req = Request.objects.get(id=id)
@@ -39,6 +43,7 @@ def delete_request(request, id):
 
 
 @api_view(['PUT'])
+@permission_classes([IsAuthenticated])
 def update_request_status(request, id):
     try:
         req = Request.objects.get(id=id)
