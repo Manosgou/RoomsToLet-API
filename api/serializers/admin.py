@@ -89,12 +89,13 @@ class CreateUpdateHouseSerializer(serializers.ModelSerializer):
         instance.has_tv = validated_data.get('has_tv', instance.has_tv)
         instance.description = validated_data.get(
             'description', instance.description)
+        instance.is_available = validated_data.get(
+            'is_available', instance.is_available)
         instance.price = validated_data.get('price', instance.price)
 
         images = validated_data.pop('images')
 
         for image in images:
-            print(image)
             house_image, created = HouseImage.objects.update_or_create(
                 id=image.get('id'), house_id=instance)
             if image['image'] is not None and created:

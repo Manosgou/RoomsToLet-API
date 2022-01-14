@@ -14,11 +14,29 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path, include
+from django.urls import path, re_path, include
 from django.conf.urls.static import static
 from django.conf import settings
 
+from rest_framework import permissions
+from drf_yasg.views import get_schema_view
+from drf_yasg import openapi
+
+
+schema_view = get_schema_view(
+    openapi.Info(
+        title="Rooms To Let API",
+        default_version='v1',
+        description="This page contains the api documentation using swagger.",
+    ),
+    public=True,
+    permission_classes=[permissions.AllowAny],
+)
+
+
 urlpatterns = [
+    re_path(r'^swagger/$', schema_view.with_ui('swagger',
+            cache_timeout=0)),
     path('admin/', admin.site.urls),
     path('api/v1/', include('api.urls.general')),
     path('api/v1/client/', include('api.urls.client')),
