@@ -15,7 +15,7 @@ from api.serializers.staff import RequestsSeriliazer
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def get_requests(request):
-    requests = Request.objects.all(status='PE')
+    requests = Request.objects.filter(status='PE')
     serializer = RequestsSeriliazer(requests, many=True)
     return Response(serializer.data)
 
