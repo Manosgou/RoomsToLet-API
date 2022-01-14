@@ -71,7 +71,7 @@ def update_house(request, id):
 @permission_classes([IsAuthenticated])
 def staff_members(request):
     if request.method == 'GET':
-        staff_members = User.objects.filter(is_staff=True)
+        staff_members = User.objects.filter(is_staff=True, is_superuser=False)
         seriliazer = StaffMembersSerializer(staff_members, many=True)
         return Response(seriliazer.data, status=HTTP_200_OK)
     elif request.method == 'POST':
